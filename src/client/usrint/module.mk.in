@@ -1,0 +1,52 @@
+DIR := src/client/usrint
+
+ifeq ($(build_usrint),yes)
+
+OSRC := \
+	$(DIR)/pvfs-path.c \
+	$(DIR)/mmap.c \
+	$(DIR)/openfile-util.c \
+	$(DIR)/iocommon.c \
+	$(DIR)/request.c \
+	$(DIR)/ucache.c \
+	$(DIR)/posix-pvfs.c  \
+	$(DIR)/env-vars.c
+
+#   these routines don't need pvfs implementation and will
+#   probably be removed
+#	$(DIR)/acl.c \
+
+USRC := \
+	$(DIR)/posix.c \
+	$(DIR)/stdio.c \
+	$(DIR)/selinux.c \
+	$(DIR)/overunder.c \
+	$(DIR)/fts.c \
+	$(DIR)/glob.c \
+	$(DIR)/error.c \
+	$(DIR)/recursive-remove.c
+
+#   these routines do no need to use the pvfs descriptor
+#   and will probably be removed
+#	$(DIR)/socket.c \
+
+# list of all .c files (generated or otherwise) that belong in library
+OLIBSRC += $(OSRC)
+ULIBSRC += $(USRC)
+
+endif # build_usrint
+
+SRC := \
+	$(DIR)/pvfs-qualify-path.c
+
+LIBSRC += $(SRC)
+
+#gcc 7.1.1 includes -Wnonnull-compare when -Wall is used.  For the
+#usrint compile, the nonnull-compare is triggered because many of
+#the coreutils functions are defined with __nonnull attribute.  
+#In many places within the usrint code, we look for nonnull
+#values, which triggers this warning.  We will turn this off
+#when we compile usrint.
+
+MODCFLAGS_$(DIR)/posix.c := -Wno-nonnull-compare
+MODCFLAGS_$(DIR)/stdio.c := -Wno-nonnull-compare

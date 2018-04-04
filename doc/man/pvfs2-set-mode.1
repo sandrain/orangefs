@@ -1,0 +1,47 @@
+.TH PVFS2-SET-MODE 1 2017-07-06
+.SH NAME
+\fBpvfs2-set-mode\fR \(en set server mode
+.SH SYNOPSIS
+\fBpvfs2-set-mode\fR [\fB\-s \fIserver\fR] [\fB\-m \fImount_point\fR]
+\fImode\fR
+.SH DESCRIPTION
+The
+.I pvfs2-set-mode
+utility is used to change the mode of the server.
+.PP
+The modes are as follows:
+.IP admin
+Read-only access to be used when running
+.BR pvfs2-fsck ( 1 ) \& .
+.IP normal
+Normal operation.
+.PP
+The options are as follows:
+.IP -s
+Specify the address of the server.  This option is used to change the
+mask only on a particular server instead of the entire cluster.
+.IP -m
+Specify the file system to operate on.
+.SH ENVIRONMENT
+.IP PVFS2_DEBUGFILE
+If set to the path of a local file, redirect debug output to it.
+.IP PVFS2_DEBUGMASK
+Set the OrangeFS debug mask.  Possible masks are documented in
+.BR pvfs2-set-debugmask ( 1 ) \& .
+.IP PVFS2TAB_FILE
+If set, the full pathname for an alternate
+.IR pvfs2tab
+file
+.SH FILES
+.I /etc/pvfs2tab
+.SH EXAMPLES
+Put server into admin mode.
+.PP
+.RS 6n
+pvfs2-set-mode -m /mnt admin
+.RE
+.SH BUGS
+Please submit bug reports to pvfs2-developers@beowulf-underground.org
+.SH SEE ALSO
+.BR pvfs2-set-sync ( 1 ),
+.BR pvfs2tab ( 5 )
